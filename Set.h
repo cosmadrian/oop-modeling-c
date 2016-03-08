@@ -1,6 +1,7 @@
 #ifndef SET_H
 #define SET_H
 
+
 extern const void * Set;
 
 void * add (void* set, const void* element);

@@ -19,8 +19,6 @@ int main ()
 		puts("differ?");
 	if (contains(s,drop(s,a)))
 		puts("drop?");
-	delete(drop(s,b));
-	delete(drop(s,c));
 	
 	return 0;
 
