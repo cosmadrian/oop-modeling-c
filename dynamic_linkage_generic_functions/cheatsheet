@@ -1,0 +1,70 @@
+struct type{
+	size_t size;	//size of the object
+	void (*dtor) (void*) //destructor
+};
+
+struct String{
+	char* text;
+	const void * destroy; //locate destructor
+};
+
+struct Set{
+	..info..
+	const void * destroy;
+}
+
+################
+
+struct Class{
+	size_t size;
+	void (*ctor) (void * self, va_list * app);
+	void (*dtor) (void * self);
+	void (*clone) (const void *self);
+	void (* differ) (const void * self, const void *b)
+};
+
+struct String{
+	const void * class;
+	char * text;
+};
+
+struct Set{
+	const void * class; //must be first;
+	...	
+};
+
+void * new(const void * _class, ...)
+{
+	const struct Class * class = _class;
+	void * p = calloc(1, class->size);
+	* (const struct Class **) p = class;
+	if(class->ctor)
+	{
+		va_list ap;
+		va_start(ap,_class);
+		p = class->ctor(p,&ap);
+		va_end(ap);
+	}
+	return p;
+}
+
+void delete (void * self)
+{
+	const struct Class ** cp = self;
+
+	if(self && *cp && (*cp)->dtor)
+		self = (*cp)->dtor(self);
+	free(self);
+}
+
+int differ (const void* self, const void * b)
+{
+	const struct Class * const * cp = self;
+	return (*cp)->differ(self,b);
+}
+
+size_t sizeOf(const void *self)
+{
+	const struct Class * const *cp = self;
+	return (*cp)->size();
+}
