@@ -3,6 +3,6 @@
 
 void * new (const void * class, ...);
 void delete (void * item);
-void draw (const void * selft);
+void draw (const void * self);
 
 #endif
